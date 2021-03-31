@@ -1,4 +1,7 @@
-.ARC  linguist-vendored
-.arc  linguist-vendored
+.ARC linguist-vendored
+.arc linguist-vendored
 *.ARC linguist-vendored
 *.arc linguist-vendored
+SHEL_MSG/SHELMSGS.ARC linguist-vendored
+CCMSGS/CCMSGS.ARC linguist-vendored
+UTL_MSGS/UTILMSGS.ARC linguist-vendored
