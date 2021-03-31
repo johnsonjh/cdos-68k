@@ -1,0 +1,19 @@
+
+DISK4.DOC                       Developer Kit Disk 4 - Programmer's Utilities
+                                                       and Tools and C Compiler
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+
+     This disk contains the assembler, C compiler, linkers, debugger, and
+other programming tools and utilities.  These tools and utilities are all 
+documented in the PROGRAMMER'S UTILITIES GUIDE.  Supplemental discussions
+of assembly language programming conventions, file load formats, and the use
+of the COFF and CRUNCH utilities are contained in the CONCURRENT DOS 
+SUPPLEMENT FOR COMPUTERS BASED ON THE MOTOROLA MC68000 FAMILY OF 
+MICROPROCESSORS.
+
+     The C library contains CP/M 68K code rather than CDOS 68K native mode 
+code and therefore, the executable files produced can only be run on CDOS 68K
+systems that include the CP/M 68K front end.  CDOS native mode C programs can
+be produced by using the SYSLIB.L68 library included on Developer Kit Disk 5.  

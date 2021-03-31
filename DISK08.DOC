@@ -1,0 +1,75 @@
+
+DISK8.DOC               Developer Kit Supplement Disk 3 - System Generation
+                                                          Objects
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+     This diskette is contains the remainder of the object files required to\
+generate a new system file.  In general the files are organized into the
+following categories:
+
+File System files:
+FSCACHE.O
+FSDM.O
+FMNAME.O
+FSPATH.O
+FSVOL.O
+FSWINDOW.O
+HOOK.O
+
+CP/M 68k Front End files:
+FE1.O
+FE2.O
+FE68.O
+FESTUB.O (used in systems with no front end)
+FEINIT.O
+FEMAIN.O
+FE.O
+FEU1.O
+FEU2.O
+FPOOL.O
+FPOOL68K.O (used in systems with no front end)
+FPRINTF.O
+SUP68K.O
+SUP68KNF.O (used in systems with no front end)
+
+Console Driver files:
+VCDRCOPY.O
+VCDRTOOL.O
+VCDRV.O
+VCDRVWRT.O
+IBMTOVM.O
+VMCONASM.O
+VMKB.O
+
+Disk Driver files
+VMDISKA.O
+VMRWINDK.O
+
+Serial Port Driver files
+VM400.O
+VT52.O
+SDRV.O
+DRT.O
+
+Kernel, Resource Managers and Misc. files
+ABORT.O		AFLAG.O		ALLOCATE.O	ASYNC.O
+ASYNCA.O	BASE.O		COFFLOAD.O	COMMAND.O
+CPMLOAD.O	CRMAN.O		CRMCONV8.O	CRMCOPY.O
+CRMCREAT.O	CRMDEL.O	CRMREAD.O	CRMGSL.O
+CRMINST.O	CRMKB.O		CRMMOUSE.O	CRMOPEN.O
+CRMRDEL.O	CRMWIND.O	CRMWRITE.O	CRMXLAT.O
+DINIT.O		DVRIF.O		EXCEPT.O	FREE.O
+HEAP.O		INSTALL.O	KFUNCS.O	KTOOLS.O
+LOAD68K.O	LUTILS.O	M68.O		MISMAN.O
+MGETBLK.O	NULLDEV.O	OFILE.O 	OSMEM.O
+OVERLAY.O	PANIC68.O	PEWTER.O 	PIPE.O
+PMGET.O	        PROCESS.O	RDELIM.O 	RTMIF.O
+SUPERMAN.O	SWI68K.O	TABLES.O	TOOLS.O
+VMCLK.O		VMCONFIG.O	VMPANIC.O	VMQUEUE.O
+VPROBE.O
+
+NOTE:  The files BASE.O, COFFLOAD.O, and COMMAND.O are on Developer Kit
+Supplement Disk 2 instead of Developer Kit Disk 3 as shown in the CDOS
+68K Release Note.
+

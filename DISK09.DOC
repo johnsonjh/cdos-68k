@@ -1,0 +1,33 @@
+DISK9.DOC                OEM Redistribution Kit Disk 1 - Utility Objects
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+     This diskette contains the object files and batch files to build the
+following utilities:
+
+RECDIR
+FSET
+MORE
+SORT
+CHKDSK
+PROCESS
+CONFIG
+RENAME
+DATE
+DIR
+DISKSET
+FIND
+TIME
+TREE
+TYPE
+COPY
+VER
+VOL
+BACKUP
+WMEX
+RESTORE
+LOGON
+COMP
+PASSWORD
+RECFILE
+

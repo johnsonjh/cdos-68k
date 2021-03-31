@@ -1,0 +1,32 @@
+DISK10.DOC                OEM Redistribution Kit Disk 2 - System Libraries
+                                                          Shell Objects, Booter
+							  Source, and OEM
+							  Configurable Utilities
+                                                          Sources
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+     This diskette is organized into the following subdirectories:
+
+L68S -- System libraries linked into the shell and the CDOS utilities.
+
+SHEL_OBJ -- Shell object file and the linker input file SHELL.COM to 
+regenerate the shell.
+
+BOOTER  --  Sources to the booter used with CDOS 68K for the VME/10.
+
+CFG_UTL  --  Sources and linker input files for the following OEM
+configurable utilities:
+
+COFF
+FORMAT
+SYS
+DISKCOMP
+DISKCOPY
+CRUNCH
+SS
+
+This subdirectory also includes the files PORTAB.H and STDIO.H.  These
+are special versions the header files designed specifically for use when
+compiling the BOOTER and other utilities.  Do not use other versions of
+PORTAB.H or STDIO.H when compiling sources included on this disk.

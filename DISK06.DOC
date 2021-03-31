@@ -1,0 +1,27 @@
+DISK6.DOC               Developer Kit Supplement Disk 1 - Driver and System
+                                                          Sources
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+     This diskette is organized into three subdirectories:
+
+     DRV_SRC -- Contains all of the CDOS 68K driver modules in source form.
+     In addition to the files listed in the release note, this subdirectory
+     contains the file CPASM.BAT which is used to process the RAMDISK driver
+     source component BTOOLS.PS.  To produce a loadable ramdisk driver, the 
+     linker output file RDD.68K must be processed by the CRUNCH utility.
+     
+     SYS_SRC -- Contains all of the CDOS 68K system configuration modules
+     in source form.  Also, the file listed in the release note as OMMUA.S
+     is named OMMUA.PS.  Files with the file extension "PS" are assembler
+     files that use the #include directive and must be processed by the C
+     preprocessor CP68.68k.
+
+     HEADERS -- Contains all of the .h files used to compile the sources 
+     in DRV_SRC and SYS_SRC.
+
+     In order to conserve disk space, some of the .h files that are used to
+compile the SYSLIB sources may not have been duplicated on this disk.  Check 
+Developer Kit Disk 5 for additional .h files.
+
+

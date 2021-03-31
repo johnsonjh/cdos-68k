@@ -1,0 +1,29 @@
+DISK7.DOC               Developer Kit Supplement Disk 2 - System Debugger,
+                                                          System Generation
+                                                          Tools and Objects
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+     This diskette is organized into two subdirectories:
+
+     DEBUGGER -- Contains all of the files necessary to debug a CDOS 68K
+     system under CP/M 68K.  Instructions for using the cross-environment
+     debugger are provided in the CDOS 68K Release Note.
+
+     SYS_GEN -- Organized into two subdirectories:
+
+          TOOLS --  Contains .BAT and .COM files to link a new system file.
+          The different permutations of hardware and features are described
+          in the CDOS 68K Release Note.  To link a new system file you must
+          increase the stack size of LINK68.68K to F000h with the following
+          command:
+
+               SS -sf000 link68.68k
+
+          OBJECTS -- Contains some of the objects files required to link a new
+          system file.
+
+NOTE:  The files BASE.O, COFFLOAD.O, and COMMAND.O are on Developer Kit
+Supplement Disk 2 instead of Developer Kit Disk 3 as shown in the CDOS
+68K Release Note.
+

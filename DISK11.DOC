@@ -1,0 +1,56 @@
+DISK11.DOC                OEM Redistribution Kit Disk 3 - System Message Source,
+                                                          CP/M68K to CDOS File
+                                                          Transfer Utility, and
+                                                          Special Sources
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+     This diskette is organized into the following subdirectories:
+
+CCMSGS --  Contains the sources to all of the general system messages in
+COMBINE'd file format.  Convert to individual files using the EXPAND
+utility.
+
+UTL_MSGS -- Contains the sources to these utilities in COMBINE'd file
+format.  Convert to individual files using the EXPAND utility.
+
+RECDIR
+FSET
+MORE
+SORT
+CHKDSK
+PROCESS
+CONFIG
+RENAME
+DATE
+DIR
+DISKSET
+FIND
+TIME
+TREE
+TYPE
+COPY
+VER
+VOL
+BACKUP
+WMEX
+RESTORE
+LOGON
+COMP
+PASSWORD
+RECFILE
+
+Source -- Contains the source to files which must be modified to run CDOS
+68K on a Motorola 68020 microprocessor.  See the CDOS 68K Release Note
+for additional information; these files are named DISPA.PS and MMU.PS and 
+should be assembled using the CPASM.BAT file found in the DRV_SRC directory 
+on Developer Kit Supplement Disk 1.  This subdirectory also contains the 
+files STRUCT.EQU, PANIC.EQU, and CPUMMU.EQU which are not shown on the list
+of included files in the RELEASE NOTE.
+
+VMUTIL --  Contains the source and executable file for the CP/M 68K to CDOS 
+68K file transfer utilitiy.
+
+SHEL_MSG -- Contains the sources to the utilities built in to the shell in
+COMBINE'd file  format.  Convert to individual files using the EXPAND utility.
+

@@ -1,0 +1,28 @@
+DISK1.DOC                       Developer Kit Disk 1 - Boot Disk and Executable
+                                                       Utilities (part 1)
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+
+     In this release of Concurrent DOS 68K the operating system's function-
+ality and characteristics are defined in two phases;  1) the initial hardware
+configuration and the user environment are defined during system generation
+(when the CDOS.SYS file is created) by the VMCONFIG.C file, and 2) at system
+load time via the files CONFIG.BAT and AUTOEXEC.BAT.  Be sure to edit these
+files to correspond to any changes you make to your hardware or software
+organization.
+
+     This version of Concurrent DOS is shipped with a system that includes 
+the CP/M 68K front end and may be booted from either the floppy or the hard 
+disk.  Instructions for booting from the hard disk are included in the 
+Concurrent DOS for the Motorola MC68000 Release Note. 
+
+     For the VME/10 the window manager keys are as follows:
+
+Function            Key
+
+<WINDOW>            SEL
+<HELP>              PAD FUNC + HELP
+<NEXT>              -->| (the tab key on the arrow keypad)
+<PREV>              |<-- (the backtab key on the arrow keypad)
+

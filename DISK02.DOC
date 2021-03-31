@@ -1,0 +1,15 @@
+DISK2.DOC                       Developer Kit Disk 2 - Executable Utilities
+                                                       (part 2) and UNIX-like
+                                                       Utilities (part 1) 
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+
+     This disk contains the remainder of the CDOS native utilities and part
+1 of a set of general purpose tools similar to some of the tools provided with 
+UNIX.  These UNIX-like tools are provided to help system developers and
+application programmers create and maintain files.  These tools are documented
+in the PROGRAMMER'S UTILITIES GUIDE SUPPLEMENT.  
+
+
+
