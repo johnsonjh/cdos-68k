@@ -1,0 +1,4 @@
+system,********,0,0,default:,system:wmex.68K,system:command.68K,1
+,********,0,0,default:,system:wmex.68K,system:command.68K,1
+user,********,100,0,default:,system:wmex.68K,system:command.68K,1
+nowind,********,0,0,default:,shell,system:command.68K,1

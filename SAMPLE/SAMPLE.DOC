@@ -1,0 +1,31 @@
+SAMPLE.DOC                      Developer Kit Disk 3 - Sample Source Code
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+
+     The sample source code in this subdirectory is only meant to be used
+as a study guide.  This source code is only a portion of the CDOS window
+manager, WMEX.68K.  In its present form, it cannot be compiled as there
+are certain header files and library dependencies not included as part of 
+the Developer Kit.
+
+     This code contains examples of windowing techniques, message passing, and
+process spawning.  It is provided soley as an aide for developing software
+that contains these features in the native CDOS 68K mode.
+
+Source code files provided:
+
+WMEXNUT  C
+WMEXDATA C
+WMCHAR   H
+WMOS     H
+WMEX     H
+WMUTLS   C
+WMEX     C
+
+     In addition to the files listed in the release note the following 
+sample source files are provided:
+
+CCUTLS   H
+UTLERRS  H
+

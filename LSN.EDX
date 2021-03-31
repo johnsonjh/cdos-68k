@@ -1,0 +1,304 @@
+Welcome to DREDIX!  We'll be explaining how to use DREDIX in a series of
+short, simple lessons. Each lesson will appear here, at the top of the screen.
+You'll be able to try out what you learn at the bottom, where the cursor is.
+
+When you're finished with a lesson and ready to go forward, hold down the
+control key and type F. We'll use the notation ^F for a keystroke like this.
+If you want to go back to an earlier lesson, type ^B.
+
+Now, type ^F and the lessons will begin ...
+@
+ENTERING TEXT
+
+Type something on the alphanumeric keyboard.  Did you notice how each letter
+was entered onto the screen where the cursor was, and then the cursor moved to
+the right?  This is the basic way you enter text using DREDIX.
+
+Now try using the RETURN key.  Notice how it ended the line and moved the
+cursor to the start of the next line? Try entering some more text, and when
+you're ready to go on, type ^F. If you want to go back to the previous lesson,
+type ^B.
+@
+MOVING THE CURSOR UP, DOWN, LEFT, AND RIGHT
+
+To move the cursor around, you use the control key along with a letter. Press
+^E to move up, ^X to move down, ^S to move left, and ^D to move right. Try it.
+
+Did you notice that sometimes pressing a directional key didn't do anything? 
+If there's no place to go (for example, UP when you're already at the top),
+then that's where the key takes you: no place.
+
+Press ^F to go on, and ^B to go back.
+@
+INSERTING TEXT
+
+If you move the cursor to somewhere WITHIN a line of text and then type, the
+new text will be inserted where the cursor is.  Since the old text has to go
+somewhere, DREDIX pushes it to the right.  Give it a try.
+
+Try this too: Move the cursor to the middle of a line and press RETURN.  The
+line is split!  You can think of this as inserting a "RETURN" into a line.
+
+Press ^F to go on, and ^B to go back.
+@
+DELETING TEXT
+
+One more lesson, and you'll know all you need to start typing a manuscript or a
+program.  What if you want to erase something you've typed?  If you notice a
+mistake right away, you can just backspace over it with the backspace key.
+
+Or, you can just move the cursor under the character you want to delete, and
+press the key marked Del or ^G.  Try it out.
+
+So now you can enter, insert, and delete text!  Press ^F to go on ...
+@
+JOINING LINES
+
+Remember how you could insert a RETURN as though it were an ordinary character?
+You can delete a RETURN, too!  Try moving the cursor to the far right of a line
+(not the last line, though), and pressing Del.  Two lines are joined into one!
+
+So inserting RETURN splits lines, and deleting RETURN joins lines!
+
+There's lots more to come, so type ^F and we'll continue...
+@
+GETTING HELP
+
+One of the most useful commands is the HELP command.  You can issue this
+command at any time to get some help from DREDIX about what to do in whatever
+situation you`re in.  Try it: type ^J.
+
+Are you back?  Do it again, if you want.
+
+Now type ^F ...
+@
+EDITING FILES
+
+Tired of typing?  Want to get a lot of text in a hurry?  The EDIT command tells
+DREDIX to read in a file of text (or a program, or some data, or whatever). To
+issue this command, type ^KE. (That's two keystrokes: ^K followed by E.)
+Answer "y" (followed by RETURN) if you get an "OK to lose changes" question.
+
+DREDIX has displayed the prompt "File:" and placed the cursor after it. It wants
+you to type a file name.  Type the name "text". (Don't forget RETURN.) You
+should have a window-full! Press ^F to do some things with this text ...
+@
+SCROLLING
+
+Now, there's more text in the file "text" than DREDIX is showing (you probably
+suspected as much).  Move the cursor down with ^X. Notice what happens when
+you reach the last visible line?  DREDIX scrolls the text automatically!
+
+Now go back up with ^E.  DREDIX scrolls it back up.  In fact, you're free to
+move the cursor through the text any way you want, and DREDIX will move the
+window to keep up.  Practice a while if you like (go ahead and change the text
+if you want to--you can't hurt anything).  Then it's ^F and more ...
+@
+SCROLLING SIDEWAYS
+
+DREDIX not only can scroll up and down, but it can scroll sideways, too! To see
+this, you'll have to help out by editing the file "text" a little, but you've
+already learned all you need.  First, join two lines together by moving the
+cursor to the end of a line and pressing Del.  You've probably made the line
+too long to fit on the screen (more than 80 chracters).  Move the cursor to the
+right (as though you were moving it off the screen).  The window moves with it!
+
+You might want to play around with this a while. It's fun! And then ^F ...
+@
+THE SCREEN
+
+It's time we explained a few things about the screen.  As you can see, it's
+divided into two windows.  You've been working in the lower window, and we've
+been displaying lessons in the upper window.
+
+At the upper right DREDIX tells you what file you're editing, the column you're
+in, the line you're on, and the total number of lines. It also tells you what
+"buffer" you're in (B2), but we won't worry about buffers right now. Messages
+show up at upper-left, and prompts above messages.  Now, ^F ...
+@
+JUMPING AROUND
+
+Moving the cursor up and down a line at a time can get pretty tedious if you
+have a large file.  Here's how to move around in a hurry: ^QR moves the cursor
+to the very first character in the file, and ^QC moves it to the very last
+character.  Try it (you should still have "text" in your window).
+
+^R moves the window a bunch of lines up, and ^C moves it a bunch of lines
+down.  How much is a bunch?  It's however big the window is: 10 lines right
+now.  Of course, if there's nowhere to go, you go nowhere.  ^F ...
+@
+DELETING LINES
+
+If you want to delete a whole line, you could delete a character at a time. But
+there's an easier way: use ^Y.
+
+If you delete a line by mistake you can "undo" the damage with ^ZU.  You can
+think of ^Y and ^ZU as opposites.  Try to undo the deletions you just made. 
+Then delete them again, and undo them again, and ...
+
+Enough of this game ... onward with ^F ...
+@
+WINDOWS
+
+DREDIX actually has two windows, numbered 1 and 2.  We've been in window 1,
+and you've been in window 2. You have to stay in window 2 while you're taking
+these lessons, but when you use DREDIX for real, you can edit in a full-screen
+window (window 1) or in split-screen windows (1 and 2).
+
+You'll type ^Z2 to go to window 2, and ^Z1 to go back to window 1. (Don't hold
+down the control key when you type the 1 or the 2.) ^ZO restores the screen to
+one window. A full explanation is in the DREDIX User's Manual.  Press ^F ...
+@
+SEARCHING
+
+Scanning the whole file to find the text you're looking for is OK, but there's
+a nice of way of getting DREDIX to do the hunting for you.  You type a
+pattern, and DREDIX finds the text that matches it.  Here's how it goes: type
+^QF, and DREDIX will prompt you for a pattern.  Try it!  Now, type the
+pattern.  How about the letter "e" for starters?  (Don't forget RETURN.)
+
+DREDIX has moved the cursor to the first "e" it found.  You can edit there just
+as if you had moved the cursor yourself.  ^F for more ...
+@
+MORE ON SEARCHING
+
+Frequently, when DREDIX finds something that matches your pattern, it's found
+the wrong match.  Maybe it wasn't the first one you wanted, but the next one?
+
+You can tell DREDIX to look further along without retyping the pattern.  Just
+type ^L, and DREDIX will find the next match.  Go ahead, try it.
+
+Try more patterns (they're not limited to single letters, of course). There's
+more to patterns than we can go into here, so on to translating (^F) ...
+@
+TRANSLATING
+
+Automatic translation is one of DREDIX's most powerful features.  For this you
+use ^QA.  DREDIX will prompt for a pattern and then for a "replacement".
+Whatever the pattern matches will be replaced by the text you supply.
+
+Do this: type ^QA.  Then type the pattern "girl" (without the quotes), and
+after RETURN, the replacement "young woman", followed by RETURN. DREDIX will
+stop the cursor at "girl" and display a message.  To decrypt it, type ^J to
+get help (we thought you'd like to use help for once).  Then ^F ...
+@
+MORE ON TRANSLATING
+
+You can make the replacement string empty, and thereby just delete whatever the
+pattern matched.  You supply an empty replacement string just by responding to
+the "Replacement:" prompt with an immediate RETURN.
+
+There's too much more on translating for us to go into it all now.  So we'll
+move on.  If you'll press ^F ...
+@
+SAVING YOUR CHANGES
+
+When you're finished making your changes, type ^KS to rewrite the file you're
+editing with the version you've created inside DREDIX. Until you type ^KS,
+your changes aren't saved.
+
+Since a power failure or other glitch can terminate your editing session at
+any time, it's a good idea to write your changes with ^KS every few minutes,
+even if you're not finished editing. That way you stand to lose only your most
+recent changes if things go wrong. Press ^F ...
+@
+QUITTING
+
+Feel like quitting?  Well, even if you don't, you might want to later, so
+here's how: type ^KQ (the same keystrokes that escape from translating).
+
+If you try to quit without writing your changes (^KS), DREDIX will ask you
+if it's OK to lose your changes. If you answer "y", you'll quit anyway. If you
+answer "n", DREDIX won't quit and you'll get a chance to save your work first.
+This is a nice safety feature! If you don't want to quit, school's still in
+session, so press ^F ...
+@
+GOING PLACES
+
+Would you like to go directly to a line by specifying a line number?  Try ^ZG.
+It'll prompt you for a line number, and if you supply one the cursor will go
+there right away.  It's a little like searching, but via a line number instead
+of a pattern.  Useful if your compiler just gave you an error message and you
+want to see what the line in question looks like.
+
+Now, we'll move on to moving, with a gentle press of ^F ...
+@
+MARKING LINES TO BE MOVED
+
+Moving lines from one place to another is a three-step procedure:
+1. You mark the line or lines you want to move (with ^KB).
+2. You place the cursor anywhere on the line where you want the marked lines to
+   be moved to.  You can do this with the directional keys, with searching
+   (^QF), or with the go command (^ZG).
+3. You type ^KV, and DREDIX moves the text you've marked.
+
+Press ^F and we'll go through it step-by-step ...
+@
+MARKING
+
+Do this: put the cursor someplace, and type ^KB.  Notice that DREDIX tells
+you that it's waiting for the second mark.
+
+Then place the cursor a few lines away, and type ^KB.  DREDIX will highlight
+the lines you've marked.
+
+After you've marked things, type ^F and we'll move them someplace ...
+@
+MOVING
+
+Now that some lines are marked, place the cursor somewhere else (above or below
+the marked lines), and type ^KV.  DREDIX will move the lines.
+
+They're still highlighted, though, so you can easily see what DREDIX has done.
+To turn off the highlighting (and cancel the marks), just type ^KB again.
+
+Notice that DREDIX moved the lines to FOLLOW the target line.  (A useful fact to
+keep in mind.)  Copying lines is just as easy.  Press ^F and you'll see ...
+@
+COPYING
+
+Copying is exactly like moving, except that the lines you've marked aren't
+disturbed in any way: they're still marked, and still highlighted.  But a group
+of lines just like them will be appended after the cursor. Follow the steps we
+did for moving (use ^KB to mark, and then position the cursor to where you
+want the copy).  Then type ^KC.  Presto, a copy.
+
+You can move and copy BETWEEN windows, too. Just place the cursor in another
+window before typing ^KV or ^KC (try this later). And now, for ^F ...
+@
+DELETING A GROUP OF LINES
+
+There's another useful thing you can do to a group of marked lines besides
+move them or copy them: you can delete them.  The marking part is just like it
+is for moving and copying.  To delete the lines, you type ^KY (instead of ^KV
+or ^KC).
+
+Try this for yourself, and then type ^F to move on...
+@
+CONGRATULATIONS!!!
+
+If you've gotten this far, you've passed the course.  Not that there isn't more
+to learn, though. After you've used DREDIX for a while, you'll want to read the
+User's Manual thoroughly so that you can use DREDIX to its fullest.
+
+Press ^F for a list of some more handy DREDIX features that you can learn
+about from the manual.
+@
+ADDITIONAL DREDIX FEATURES
+
+* Using multiple buffers		* Appending/inserting blank lines
+* Jumping to start/end of lines		* Status of files/buffers/windows
+* Merging files				* Fancy, "wild-card" patterns
+* Additional cursor motions		* Moving right and left by words        
+* Overtype mode				* Using multiple windows
+@
+                                    THE END
+           Press ^F to start the course over, or ^KQ to exit.
+
+
+                     Emerging Technology Consultants, Inc.
+                                 1877 Broadway
+                               Boulder, CO 80302
+                                 303-447-9495
+
+ Tutorial and program (C)Copyright 1984 Emerging Technology Consultants, Inc.
