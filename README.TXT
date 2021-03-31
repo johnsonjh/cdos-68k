@@ -102,20 +102,20 @@ DISK5.DOC                               Developer Kit Disk 5 - SYSTEM LIBRARY
 6 August 1986                                              CDOS 68K, ver. 1.2
 -----------------------------------------------------------------------------
 
-	This diskette contains the sources, linkable library, submit files,
+        This diskette contains the sources, linkable library, submit files,
 and batch files for a library that will allow you to write almost normal 'C' 
 programs that will execute under CDOS version 1.2 for the MC68000 family of 
 microprocessors.  In addition to the files listed in the Release Note, the
 following files are provided on this diskette:
      
-     SYSLINK  BAT		COMPL68  BAT
-     LD       C			BUILDL68 BAT
-     STD40    H			LDIV     S
+     SYSLINK  BAT               COMPL68  BAT
+     LD       C                 BUILDL68 BAT
+     STD40    H                 LDIV     S
      LIBCALLS H                 LREM     S
-     OSIF     O			LMUL     S
-     GSTART   O			STRNCMP  C
+     OSIF     O                 LMUL     S
+     GSTART   O                 STRNCMP  C
      GSTART   C                 STRCAT   C
-     OSIF     S			STRCPY   C                 
+     OSIF     S                 STRCPY   C                 
 
      The following files listed in the Release Note have not been provided:
      
@@ -166,9 +166,9 @@ SAMPLE PROGRAMS:
         numbers  begin  with the decimal  digit.   This  program 
         demonstrates the use of the SYSLIB functions.
 
-	LD.C 	  -- Does S_LOOKUPS on the Disk File Table looking
-	for sub-directories.  LD may be invoked with or without a
-	argument.  Wild cards are allowed.
+        LD.C      -- Does S_LOOKUPS on the Disk File Table looking
+        for sub-directories.  LD may be invoked with or without a
+        argument.  Wild cards are allowed.
 
 
 DISK6.DOC               Developer Kit Supplement Disk 1 - Driver and System
@@ -284,20 +284,20 @@ SDRV.O
 DRT.O
 
 Kernel, Resource Managers and Misc. files
-ABORT.O		AFLAG.O		ALLOCATE.O	ASYNC.O
-ASYNCA.O	BASE.O		COFFLOAD.O	COMMAND.O
-CPMLOAD.O	CRMAN.O		CRMCONV8.O	CRMCOPY.O
-CRMCREAT.O	CRMDEL.O	CRMREAD.O	CRMGSL.O
-CRMINST.O	CRMKB.O		CRMMOUSE.O	CRMOPEN.O
-CRMRDEL.O	CRMWIND.O	CRMWRITE.O	CRMXLAT.O
-DINIT.O		DVRIF.O		EXCEPT.O	FREE.O
-HEAP.O		INSTALL.O	KFUNCS.O	KTOOLS.O
-LOAD68K.O	LUTILS.O	M68.O		MISMAN.O
-MGETBLK.O	NULLDEV.O	OFILE.O 	OSMEM.O
-OVERLAY.O	PANIC68.O	PEWTER.O 	PIPE.O
-PMGET.O	        PROCESS.O	RDELIM.O 	RTMIF.O
-SUPERMAN.O	SWI68K.O	TABLES.O	TOOLS.O
-VMCLK.O		VMCONFIG.O	VMPANIC.O	VMQUEUE.O
+ABORT.O         AFLAG.O         ALLOCATE.O      ASYNC.O
+ASYNCA.O        BASE.O          COFFLOAD.O      COMMAND.O
+CPMLOAD.O       CRMAN.O         CRMCONV8.O      CRMCOPY.O
+CRMCREAT.O      CRMDEL.O        CRMREAD.O       CRMGSL.O
+CRMINST.O       CRMKB.O         CRMMOUSE.O      CRMOPEN.O
+CRMRDEL.O       CRMWIND.O       CRMWRITE.O      CRMXLAT.O
+DINIT.O         DVRIF.O         EXCEPT.O        FREE.O
+HEAP.O          INSTALL.O       KFUNCS.O        KTOOLS.O
+LOAD68K.O       LUTILS.O        M68.O           MISMAN.O
+MGETBLK.O       NULLDEV.O       OFILE.O         OSMEM.O
+OVERLAY.O       PANIC68.O       PEWTER.O        PIPE.O
+PMGET.O         PROCESS.O       RDELIM.O        RTMIF.O
+SUPERMAN.O      SWI68K.O        TABLES.O        TOOLS.O
+VMCLK.O         VMCONFIG.O      VMPANIC.O       VMQUEUE.O
 VPROBE.O
 
 NOTE:  The files BASE.O, COFFLOAD.O, and COMMAND.O are on Developer Kit
@@ -341,8 +341,8 @@ RECFILE
 
 DISK10.DOC                OEM Redistribution Kit Disk 2 - System Libraries
                                                           Shell Objects, Booter
-							  Source, and OEM
-							  Configurable Utilities
+                                                          Source, and OEM
+                                                          Configurable Utilities
                                                           Sources
 6 August 1986                                          CDOS 68K ver. 1.2
 _______________________________________________________________________________
@@ -427,4 +427,3 @@ VMUTIL --  Contains the source and executable file for the CP/M 68K to CDOS
 
 SHEL_MSG -- Contains the sources to the utilities built in to the shell in
 COMBINE'd file  format.  Convert to individual files using the EXPAND utility.
-
