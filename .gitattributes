@@ -1,0 +1,4 @@
+.ARC  linguist-vendored
+.arc  linguist-vendored
+*.ARC linguist-vendored
+*.arc linguist-vendored
