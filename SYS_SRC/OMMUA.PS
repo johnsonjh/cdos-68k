@@ -1,0 +1,155 @@
+
+************************************************************************
+*  OMMUA.PS - OEM defined assembly language routines for
+*	     startup inititializaton (VME/10 version).
+*
+*  IMPORTANT NOTE:
+*	This module uses #include, so use CP68 before AS68.
+*	The CPASM.BAT file does this automatically.
+*
+*  5/15/85	MA	Put in code for 68000 bus error handling.
+*			Moved OEM-specific stuff from dispa to here.
+*  07/11/85	MA	Fixed bug in ramok (couldn't test blocks
+*			bigger than 256K).
+*  07/16/85	MA	Set up the spurious interrupt vector.
+*  08/07/85	MA	Changed to include "cpummu.equ".
+************************************************************************
+
+#include "cpummu.equ"
+
+	.globl	_doint		* external in dispa
+
+VME10	equ	1		* 1=VME/10, 0=not VME/10
+TABORT	equ	$4e		* Exc.Vector Number for Abort Key (VME/10)
+SPURVEC	equ	$60		* vector address for spurious interrupt
+
+*******************************************************************
+*	INITVEC
+*
+*	This is the first routine called on system startup after
+*	interrupts are disabled and the supervisor stack pointer is set.
+*	All registers besides SR and SSP are passed unchanged from
+*	the booter to this routine.
+*
+*	On the VME/10 the boot drive is passed in D0, which this
+*	routine saves in the global variable disknum for later use
+*	by VMCONFIG.C.
+*
+*	On all machines, this routine is responsible for painting
+*	all the interrupt vectors. The vectors are set up to point
+*	to _doint on the 68010, and to _doint + vecnumber<<24
+*	on the 68000.  This 68000 kludge (courtesy of Dave Clarke)
+*	puts the interrupt number in the high order 8 bits of the PC,
+*	which aren't used anyway.  This allows _doint to quickly
+*	determine the source of the interrupt.
+*	
+*	This routine is OEM-changable so that specific
+*	vectors can be initialized differently.  For example,
+*	on the VME/10, this routine leaves the ABORT button interrupt
+*	alone, so that we can get into SID or TENbug.  (We may
+*	want to change this in the final system.)
+*******************************************************************
+
+	.globl	_initvec
+
+_initvec:
+	nop			* place holder for the label (AS68 bug)
+
+Ifne VME10
+	move.w	d0,_disknum	* save boot drive passed from booter
+	and.b	#$fc,$f19f05	* mask off timer and dma interrupts
+	move.b	#$10,$f19f09	* reset the keyboard
+	clr.b	$f19f0b		* disable all VME bus interrupts
+	move.b	#$80,$f19f11	* allow SCM MPU interrupts
+endc
+
+	clr	d2		* d2 is the interrupt number
+	move.l	#0,a0		* a0 points to interrupt vectors
+	move.l	#_doint,a1	* a1 contains the vector itself
+ivloop:
+	cmp	#4,d2		* is this vector < 4?
+	blt	ivnext		* yes - skip this vector
+ifne	VME10			* if VME10 == 1
+	cmp	#TABORT,d2	* is this the ABORT button?
+	beq	ivnext		* yes - let SID handle this one
+endc
+	move.l	a1,(a0)		* all vectors go to doint
+ivnext:
+	add	#1,d2		* bump to next interrupt number
+	add.l	#4,a0		* point next vector
+ifeq	MC68010			* if MC68010 == 0
+	add.l	#$01000000,A1	* Keep high order vec number current.
+endc
+	cmp	#256,d2		* all done?
+	blt	ivloop		* no - go do next vector
+ivexit:
+	move.l	#spurte,SPURVEC	* set spurious interrupt vector
+	rts
+spurte:
+	rte			* ignore spurious interrupt
+
+
+************************************************************************
+*	ramok(start,length) - test a section of RAM
+*	BYTE *start;
+*	LONG length;
+*
+*	This function test a section of RAM, returning its actual length
+*	(0 if entire section is missing).  This function temporarily
+*	traps the bus error exception to find missing RAM.
+************************************************************************
+
+	.text
+TBUSERR	equ	8			* exception vector address
+
+	.globl	_ramok
+_ramok:
+	move.l	TBUSERR,olderr		* save old bus error vector
+	move.l	#buserr,TBUSERR		* set new bus error vector
+
+* test the entire section with simple patterns
+
+	move.l	4(sp),a0		* starting address
+	move.l	8(sp),d1		* get number of bytes in section
+	lsr.l	#2,d1			* convert to number of long words
+	move.l	#0,d0			* inititialize no. of bytes tested
+loop2:
+	move.l	#$55AA55AA,(a0)		* write a value to test location
+	cmp.l	#$55AA55AA,(a0)		* is the location good?
+	bne	return			* no - return actual length
+	move.l	#$AA55AA55,(a0)		* write a value to test location
+	cmp.l	#$AA55AA55,(a0)		* is the location good?
+	bne	return			* no - return actual length
+	add.l	#4,a0			* yes - increment test location
+	add.l	#4,d0			* increment actual length
+	sub.l	#1,d1			* decrement count
+	bne	loop2			* if not done, try next location
+return:
+	move.l	olderr,TBUSERR		* restore bus error vector
+	rts				* return to caller with length in D0
+
+* bus error handler:
+*	on the 68010, return to the interrupted program at next instruction
+*	on the 68000, return to the interrupted program at its exit point
+
+ifne	MC68010				* if MC68010 == 1
+buserr:
+	or.w	#$8000,8(sp)		* don't re-run instruction
+	rte				* return from exception
+endc
+ifeq	MC68010				* if MC68010 == 0
+buserr:
+	add.l	#14,sp			* clear the stack frame away
+	bra	return			* go to the exit point
+endc
+
+	.bss
+
+ifne	VME10
+	.globl	_disknum
+_disknum: .ds.w	1			* disk we booted from (0=A,1=B,...)
+endc
+
+olderr:	.ds.l	1			* old bus error vector
+
+	.end

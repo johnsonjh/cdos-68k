@@ -1,0 +1,48 @@
+*****************************************************************
+* "Copyright (C) 1985, Digital Research, Inc.  All Rights       *
+* Reserved.  The Software Code contained in this listing is     *
+* proprietary to Digital Research Inc., Monterey, California    *
+* and is covered by U.S. and other copyright protection.        *
+* Unauthorized copying, adaptation, distribution, use or        *
+* display is prohibited and may be subject to civil and         *
+* criminal penalties.  Disclosure to others is prohibited.  For *
+* the terms and conditions of software code use refer to the    *
+* appropriate Digital Research License Agreement."              *
+*****************************************************************
+
+*-==============================================================*
+*   Version 5		panic.equ
+*			System panic codes.
+*---------------------------------------------------------------*
+* VER	DATE	 BY	CHANGE/COMMENTS
+*
+*  5    12/11/85 MA	Added XX_MX
+*  4    11/07/85 MA	Added XX_MFTWO
+*  3	10/24/85 MA	Added XX_ABANY, XX_EVREM; changed XX_NOASR
+*  2	08/18/85 MA	Added XX_EXPEW, XX_NOASR, XX_INIT
+*  1	07/23/85 MA	ported to 68K.
+*  1	07/16/85 gat	initial release
+*-==============================================================*
+
+XX_NMI		equ	0	* NMI encountered			
+XX_GP		equ	1	* GP exception while in system		
+XX_DX		equ	2	* Double Jeopardy exception		
+XX_NEXTASR	equ	3	* Failure to call nextasr in asr 
+*				   causing an event.		
+XX_MGSIZE	equ	4	* MGETBLK - bad size 			
+XX_MGADDR	equ	5	* MGETBLK - bad addr in free list	
+XX_MGSPACE	equ	6	* MGETBLK - no space			
+XX_MFROOT	equ	7	* MFREBLK - bad root in hidden fields	
+XX_TERM		equ	8	* Dispatches disabled calling terminate() 
+XX_SALLOC	equ	9	* Dispatches disabled calling salloc()	
+XX_MWAIT	equ	10	* Dispatches disabled calling mwait()	
+XX_GOSWI	equ	11	* Cannot find SWI event in GOSWI	
+XX_EXPEW	equ	12	* Exited expew with dispatches disabled
+XX_INIT		equ	13	* Resource manager initialization failed
+XX_ABANY	equ	14	* Aborting process not in RUN state
+XX_EVREM	equ	15	* No e_pred in evremove
+XX_MX		equ	16	* Mutual exclusion failure
+XX_NOASR	equ	17	* Out of ASR space
+XX_MFTWO	equ	18	* MFREBLK - Attempt to free block twice
+qu	16	* Mutual exclusion failure
+XX_NOASR	equ	17	* Out of

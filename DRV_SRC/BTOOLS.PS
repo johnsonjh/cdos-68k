@@ -1,0 +1,243 @@
+/* btools.ps - block manipulation primitives				*/
+
+/*  
+**	this is a pre-processor asm source file - it must be run thru the
+**	C pre-processor, first
+*/
+
+
+
+#define	PUBLIC		.xref
+
+/*
+**  stack offsets for parameters
+**	The first three are the offsets for routines of the form
+**		routine( buffer, value, length )
+**		BYTE	*buffer ;
+**		BYTE	value ;
+**		WORD	length ;
+**	The second three are the offsets for routines of the form
+**		routine( source, dest, count )
+**		BYTE	*source, *dest ;
+**		WORD	count ;			(handles longs, too)
+*/
+
+#define	BUFFER		 4(sp)
+#define	VALUE		 8(sp)
+#define	LENGTH		10(sp)
+
+#define	SOURCE		 4(sp)
+#define	DEST		 8(sp)
+#define	COUNT		12(sp)
+
+***************************************************************************
+*
+*  bfill - intra-segment block fill routine
+*	fill block 'b' with value 'v' for 'n' bytes.  
+*	Does not check for seg boundaries
+*
+*	VOID	bfill( b , v , n ) 
+*	BYTE	*b ;
+*	BYTE	v ;	/*  passed as 16 bits on stack, use low 8	*/
+*	UWORD	n ;
+*
+	PUBLIC	_bfill
+_bfill:
+	move.l	BUFFER,a0	*  get buffer addr
+	move.w	VALUE,d0	*  get fill value
+	move.w	LENGTH,d1	*  get length; if zero
+	beq	bfxit		*    do nothing
+	move.l	a0,d2		*  copy buffer address to d2
+	btst	#0,d2		*  test if buffer address is even
+	beq	bfeven		*  if bit 0 = 0, it's already even
+	move.b	d0,(a0)+	*  if odd, fill one byte to force it even
+	sub.w	#1,d1		*   and decrement length
+	beq	bfxit		*  if length is now zero, we're done
+bfeven:
+	move.w	d0,d2		*  copy fill value
+	lsl.w	#8,d2		*  shift it left 8 to high byte
+	and.w	#$ff,d0		*  clear high byte in d0
+	or.w	d2,d0		*  now low and high bytes of d0 contain filler
+	move.w	d1,d2		*  copy byte count to d2
+	beq	bfxit		*  if zero, do nothing
+	lsr.w	#1,d2		*  convert d2 to word count
+	sub.w	#1,d2		*  adjust word count for dbra loop
+bfwloop:
+	move.w	d0,(a0)+	*  copy a word
+	dbra	d2,bfwloop	*  until d2 goes to -1
+*
+	btst	#0,d1		*  was original count odd?
+	beq	bfxit		*  no - we're done
+	move.b	d0,(a0)		*  yes - need to fill one more byte
+*
+*  exit
+*
+bfxit:
+	move.l	BUFFER,d0	*  return pointer to buffer
+	rts
+
+***************************************************************************
+*
+*  bsrch - intra-segment block search routine
+*	search for 8 bit value 'v' in block 'b' of length 'n'
+*	
+*
+*	BYTE	*bsrch( b , v , n )
+*	BYTE	*b ;
+*	BYTE	v ;	/*  16 bit val on stack, use low 8 bits		*/
+*	UWORD	n ;
+*
+	PUBLIC	_bsrch
+_bsrch:
+	move.l	BUFFER,a0	*  get buffer pointer
+	move.w	VALUE,d0	*  get search value
+	move.w	COUNT,d1	*  get max length
+	beq	bsnotfound	*  if zero length, exit with not-found 
+
+	subq	#1,d0		*  pre decrement length for dbcc instr
+bsloop:
+	cmp.b	(a0)+,d0	*    compare byte
+	dbeq	d1,bsloop	*  until match or count goes to 0
+
+	bne	bsnotfound	*  jump if we didn't match
+
+	subq	#1,a0		*  point to matching byte
+	move.l	a0,d0		*  return value in d0
+	rts
+bsnotfound:
+	clr.l	d0		*  no match -- return null pointer
+	rts
+
+***************************************************************************
+*
+*  blength - intr-segment block length routine
+*	count the length of block 'b' with terminator 'v' for at most 'n'.
+*	'n' must be a signed value.  If it is signed, it is taken as huge.
+*	If the terminator is not found, return value is -1.
+*
+*	WORD	bsrch( b , v , n )
+*	BYTE	*b ;
+*	BYTE	v ;	/*  16 bit val on stack, use low 8 bits		*/
+*	WORD	n ;
+*
+	PUBLIC	_blength
+_blength:
+	move.l	BUFFER,a0	*  get buffer pointer
+	move.w	VALUE,d0	*  get terminator value
+	move.w	LENGTH,d1	*  get max length
+	beq	blnotfound	*  if zero max, return 0 length
+
+	subq	#1,d1		*  pre decrement count for dbcc instr
+blloop:
+	cmp.b	(a0)+,d0	*    compare and inc ptr
+	dbeq	d1,blloop	*  until match or count is zero
+
+	bne	blnotfound	*  return error if no match
+
+	subq	#1,a0		*  point back to matching byte
+	suba	BUFFER,a0	*  subtract the starting address
+	move.l	a0,d0		*  return difference
+	bra	blxit
+blnotfound:
+	move.w	d0,-1		*  if not found return -1
+blxit:
+	rts
+
+
+************************************************************************
+* LBMOVE - move bytes (for blocks bigger then 64K)
+*
+*	VOID	lbmove(source,dest,count);
+*	BYTE	*source,*dest;
+*	LONG	count;
+*
+* Register usage during dbra loops:
+*	D0	byte count
+*	D1	long count
+*	D2	64K block count
+*	A0	source
+*	A1	dest
+*
+
+	PUBLIC	_lbmove
+_lbmove:
+	move.l	COUNT,d2		* get byte count
+	ble	lret			* if (count <= 0) return
+
+	move.l	SOURCE,a0		* get source pointer
+	move.l	DEST,a1			* get dest pointer
+
+	move.w	a0,d0			* compute sum of bits 0 of
+	and.w	#1,d0			*  source and dest address
+	move.w	a1,d1
+	and.w	#1,d1
+	add.w	d1,d0			* sum is in d0
+	dbra	d0,lm1			* check for zero
+	  bra	lmove			* it was zero (both even), use long move
+lm1:
+	dbra	d0,lm2			* check for 1
+	  bra	lbmove			* it was 1, use byte move
+lm2:					* it was 2
+	move.b	(a0)+,(a1)+		* copy a byte to force word alignment
+	subq.l	#1,d2			* and decrement the count
+*
+*  long move
+*
+lmove:
+	move.l	d2,d0			* copy byte count
+	and.w	#3,d0			* compute no. of leftover bytes
+	lsr.l	#2,d2			* compute no. of longwords
+	move.l	d2,d1			* copy to 64K block count
+	swap	d1			* put nbr of 64K blocks in low word
+	bra	endloop1		* go copy the long words first
+loop1:
+	move.l	(a0)+,(a1)+		* copy a long word
+endloop1:
+	dbra	d2,loop1		* copy up to 64K bytes
+	dbra	d1,loop1		* copy next 64K chunk
+	bra	endloop2		* now go copy the leftover bytes
+loop2:
+	move.b	(a0)+,(a1)+		* copy leftover odd bytes (up to 3)
+endloop2:
+	dbra	d0,loop2
+lret:
+	rts
+*
+*  come here if byte move must be used because of differing alignments
+*  of source and destination pointers
+*
+lbmove:
+	move.l	d2,d1			* copy byte count
+	swap	d1			* compute 64K block count
+	bra	endloop3		* go copy some bytes
+loop3:
+	move.b	(a0)+,(a1)+		* copy a byte
+endloop3:
+	dbra	d2,loop3		* copy up to 64K bytes
+	dbra	d1,loop3		* repeat for next 64K chunk
+	rts
+
+****************************************************************************
+*  bmove - small block move (16 bit length)
+*	move data from one ptr to another for n bytes, 0 < n < 64k
+*
+*	VOID	lbmove( s , d , l )
+*	BYTE	*s ;
+*	BYTE	*d ;
+*	UWORD	l ;
+*
+	PUBLIC	_bmove
+_bmove:
+	move.l	SOURCE,a0	*  get src  pointer
+	move.l	DEST,a1		*  get dest pointer
+	move.w	COUNT,d1	*  get 16 bit length
+	beq	lbmxit		*  exit if nothing to do
+
+	subq	#1,d1		*  pre dec for dbcc instr
+bmloop:
+	move.b	(a0)+,(a1)+	*    move a byte
+	dbra	d1,bmloop	*  until all done
+lbmxit:
+	rts
+
+
