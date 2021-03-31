@@ -5,3 +5,14 @@
 SHEL_MSG/SHELMSGS.ARC linguist-vendored
 CCMSGS/CCMSGS.ARC linguist-vendored
 UTL_MSGS/UTILMSGS.ARC linguist-vendored
+CFG_UTL/COFF.H linguist-vendored
+HEADERS/VMDRIVER.H linguist-vendored
+HEADERS/VMQUEUE.H linguist-vendored
+HEADERS/BASPAG.H linguist-vendored
+SYSLIB/LIBCALLS.H linguist-vendored
+HEADERS/VMKB.H linguist-vendored
+VMUTIL/IBMDISK.H linguist-vendored
+HEADERS/BTOOLS.H linguist-vendored
+CFG_UTL/LOAD68K.H linguist-vendored
+HEADERS/DH.H linguist-vendored
+SAMPLE/UTLERRS.H linguist-vendored
