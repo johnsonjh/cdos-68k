@@ -1,0 +1,864 @@
+	
+*****************************************************************
+* "Copyright (C) 1985, Digital Research, Inc.  All Rights       *
+* Reserved.  The Software Code contained in this listing is     *
+* proprietary to Digital Research Inc., Monterey, California    *
+* and is covered by U.S. and other copyright protection.        *
+* Unauthorized copying, adaptation, distribution, use or        *
+* display is prohibited and may be subject to civil and         *
+* criminal penalties.  Disclosure to others is prohibited.  For *
+* the terms and conditions of software code use refer to the    *
+* appropriate Digital Research License Agreement."              *
+*****************************************************************
+
+*-==============================================================*
+*   Version 9		STRUCT.EQU (formerly KSTRUCT.EQU)
+*			Kernal Data Structures for the
+*			Motorola MC68000
+*---------------------------------------------------------------*
+*
+* History:
+*
+* VER  DATE	BY	CHANGE/COMMENTS
+* ==== ======== ===     =========================================
+* 9    12/09/85 MA	New Swi system conditionals
+* 8    10/22/85 MA	Tracked changes to struct.h for V1.0C.
+*			Put e_dh back in EVB, even though not needed
+*			on 68K, to be compatible with lots of C code.
+* 7    07/22/85 MA	Ported to 68K.  Changed for
+*			new UDA,PD,MD and REGSAV format
+* 6    07/12/85 FRH	Add ASRF_FAKE flag to ASR
+* 5    07/06/85 FRH	Add SPB
+* 4    06/28/85 FRH	Add p_npx and p_mget to PD
+*			Add r_pblk to REGSAV
+* 3    06/27/85 FRH	Replace FPD,FRKEVT with ASR
+* 2    06/18/85 gat	MAXLDT equate removed
+* 1    05/23/85	FRH	Convert needed structures from STRUCT.H,
+*			STRUCT.I and STRUCT.EQU of B1.01.  This
+*			file replaces all three for RASM code.
+*-===============================================================
+
+NEWSWI	equ	1		* if 1, use new swi system (1 process)
+
+*******************************************************************************
+* C Version:
+*-==========
+*
+*	typedef ULONG   EVSPEC;
+*	
+*	#if	MC68K
+*	
+*	typedef LONG	jmp_buf[12];	/* space for D3-D7,A2-A7,PC */
+*	
+*	#define	INTOFFS	224		/* n-INTOFFS = actual trap number */
+*	#define	PT_68K	0		/* Index for .68K files. */
+*	#define	PT_REL	1		/* Index for .REL files. */
+*	
+*	#else
+*	
+*	typedef LONG	jmp_buf[2];
+*	
+*	#define	INTOFFS	256		/* n-INTOFFS = actual trap number */
+*	#define	PT_286	0		/* Index for .286 files. */
+*	#define	PT_CMD	1		/* Index for .CMD files. */
+*	#define	PT_EXE	2		/* Index for .EXE files. */
+*	#define	PT_COM	3		/* Index for .COM files. */
+*	
+*	#endif
+*	
+*	JBA
+*	{
+*		jmp_buf	j_swi;
+*		jmp_buf	j_nrpl;
+*		jmp_buf j_sav;
+*	} ;
+*	
+*******************************************************************************
+
+*******************************************************************************
+*
+*	VCB structure as seen outside the Console System
+*
+*******************************************************************************
+* C Version:
+*-==========
+*
+*	/* Dummy VCB definition for PD use. */
+*	
+*	VCB
+*	{
+*	    BYTE *v_tnp[4];
+*	    BYTE *v_pcframe;
+*	};
+*	
+*******************************************************************************
+
+v_pcframe	equ	16
+
+
+*******************************************************************************
+* C Version:
+*===========
+*
+*		/* Size of BDA for allocations */
+*	BDA
+*	{
+*		BYTE bda_fill[100];
+*	};
+*
+*******************************************************************************
+
+*******************************************************************************
+*
+*	Various Definitions
+*
+*******************************************************************************
+* C Version:
+*===========
+*	
+*	#define ZPAGESIZE	0x400	/* int vectors */
+*
+*******************************************************************************
+
+ZPAGESIZE	equ	$400
+
+*******************************************************************************
+*
+*	UDA - User Data Area
+*
+*	The UDA is an extension to the Process Descriptor.  It
+*	contains information that is only needed while this
+*	process is in context.  It can be swapped out when
+*	swapping is implemented.
+*
+*	UDA: (User Data Area)
+*
+*    0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F   10
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 00 |      D3       |      D4       |      D5       |      D6	     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 10 |      D7       |      A3       |      A4       |      A5	     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 20 |      A6       |   A7 (USP)    |   A7 (SSP)    |	  D3 save    |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 30 |    D4 save    |    D5 save    |    D6 save    |    D7 save    |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 40 |    A3 save    |	  A4 save    |	  A5 save    |	  A6 save    |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 50 |	  USP save   |    SSP save   | PFLAGS| FILLER|	  USTKSAV    |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 60 |	  SWITSTK    |	 UDASALLOC   |   SWIREGSAV   |   USYSMAP ... |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 70 |  							     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 80 |					... USYSMAP  | ZEROPAGE ...
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+*
+*******************************************************************************
+* C Version:
+*===========
+*
+*	#define UDA struct uda	/* user data area */
+*	UDA
+*	{
+*		LONG	u_dreg[5];	/* D3-D7 */
+*		LONG	u_areg[5];	/* A3-A7 */
+*		LONG	u_stk0;		/* Supervisor stack pointer */
+*	#if NEWSWI
+*		LONG	u_dsav[5];	/* dsptch dreg save */
+*		LONG	u_asav[5];	/* dsptch areg save */
+*		LONG	u_stk0sav;	/* dsptch system stack save */
+*		WORD	u_pflags;	/* PF_INSYS save */
+*		WORD	u_filler;
+*		LONG	u_ustksav;
+*		LONG	u_switstk;
+*		LONG	u_udasalloc;
+*		REGSAV	*u_swiregsav;
+*	#endif
+*		UWORD	u_usysmap[16];	/* user or system exception map:
+*					 * one bit for each of 256 vectors.
+*					 *	0 ==> user defined exception
+*					 *	1 ==> system exception
+*					 */
+*	
+*		/* The zero page contains the
+*		 * interrupt page (0-3ff)
+*		 */
+*		union {
+*		ULONG	l[1];
+*		UWORD	w[1];
+*		UBYTE	b[ZPAGESIZE];	/* adjust this one */
+*		WORD	(*proc[1])();	/* as a pointer to a procedure */
+*		}
+*			u_zeropage;
+*	} ;
+*	
+*******************************************************************************
+
+u_dreg		equ	0	* D3-D7
+u_areg		equ	20	* A3-A6
+u_usp		equ	36	* User stack pointer
+u_stk1		equ	36	* User stack pointer
+u_stk0		equ	40	* System stack pointer
+
+u_dsav		equ	44	* D3-D7
+u_asav		equ	64	* A3-A6
+u_uspsav	equ	80	* saved user sp
+u_stk0sav	equ	84	* saved system sp
+u_pflags	equ	88	* PF_INSYS save
+u_filler	equ	90	* two byte filler
+
+u_stksav	equ	92
+u_switstk	equ	96
+u_udasalloc	equ	100
+u_swiregsav	equ	104
+u_usysmap	equ	108
+u_zeropage	equ	140
+
+SIZEOF_UDA	equ	u_zeropage + ZPAGESIZE
+SIZEUDA		equ	SIZEOF_UDA
+
+*******************************************************************************
+*
+*	Register Save Area (REGSAV) - Used by Exception Handler and DOS FE
+*
+*    0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F   10
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 00 |      D0       |      D1       |      D2       |      D3	     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 10 |      D4       |      D5       |      D6       |      D7	     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 20 |      A0       |      A1       |      A2       |      A3	     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 30 |      A4       |      A5       |      A6       |      USP	     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 40 |      PC	     |  SR   |	PBLK ...			     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 50 |	PBLK ...						     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 60 |		   ... PBLK  |
+*    +---+---+---+---+---+---+
+*
+*
+*******************************************************************************
+* C Version:
+*===========
+*
+*	/* REGSAV.H - layout of a process's Register Save Area */
+*	/*	These are the user-visible registers */
+*	
+*	#define REGSAV struct regsav
+*	REGSAV
+*	{
+*		ULONG	r_dreg[8];
+*		ULONG	r_areg[8];
+*		ULONG	r_pc;
+*		UWORD	r_sr;
+*		BYTE	r_pblk[32];
+*	} ;
+*******************************************************************************
+
+r_dreg		equ	0	* D0-D7
+r_areg		equ	32	* A0-A7
+r_usp		equ	60	* special A7 definition
+r_pc		equ	64	* program counter
+r_sr		equ	68	* status register
+r_pblk		equ	70	* SVC PBLK = 32 bytes
+
+SIZEOF_REGSAV	equ	102		*
+SIZE_REGSAV	equ	SIZEOF_REGSAV
+
+*******************************************************************************
+* C Version:
+*===========
+*	
+*	/* indexes into p_mem array of PD */
+*
+*	#define M_CODE	0x0000
+*	#define M_DATA  0x0001
+*	#define M_HEAP	0x0002
+*	#define M_STACK 0x0003
+*
+*	/* MD flags */
+*
+*	#define M_MEDCHG 0x0010	/* media change on shared code */
+*	#define M_SRTL	0x0020	/* system memory with user access */
+*	#define M_DUP	0x0040	/* duplicate of shared memory descriptor */
+*	#define M_SHARE	0x0080	/* may be shared by other processes */
+*	#define M_SCL	0x0100	/* memory on shared code list */
+*	#define M_FREE	0x0200	/* memory on free list */
+*	#define M_SYSMEM 0x0400 /* memory allocated by system */
+*	#define M_USERMEM 0x0800 /* memory allocate by a user task */
+*	#define LM_NRPL 0x1000	/* what is this used for? */
+*
+*	/*  memory descriptor */
+*
+*	MD
+*	{
+*	    MD	    *m_link;	/* general purpose link */
+*	    LONG    m_start;	/* physical starting address */
+*	    LONG    m_length;	/* physical length */
+*	    LONG    m_lbase;	/* logical starting address */
+*	    MD	    *m_alink;	/* allocated list link */
+*	    MD	    *m_orig;	/* ptr to original MD if sharing */
+*	    WORD    m_flags;	/* M_SHARE, M_DUP, M_SRTL, etc. */
+*	    UWORD   m_waste;	/* unused portion of heap */
+*	    BYTE    m_use;	/* number of users */
+*	    BYTE    m_lock;	/* number of locks in effect */
+*	} ;
+*
+*
+*	#define SRTLID struct srtlid
+*	SRTLID
+*	{
+*		UBYTE	name[8];	/* SRTL file name */
+*		UWORD	v_major;	/* major version number of SRTL */
+*		UWORD	v_minor;	/* minor version number of SRTL */
+*		ULONG	flags;		/* SRTL flags */
+*	} ;
+*
+*	#define OSSRTL struct ossrtl
+*	OSSRTL
+*	{
+*		OSSRTL	*s_link;	/* link to next OSSRTL */
+*		UWORD	ucount;		/* no. of processes using this SRTL */
+*		MD	*srtl_lmd;	/* SRTL code MD */
+*		SRTLID	sid;		/* SRTL ID structure */
+*	} ;
+*
+*	#define LSRTL struct lsrtl
+*	LSRTL
+*	{
+*		LSRTL	*ls_link;	/* link to next process LSRTL */
+*		OSSRTL	*s_link;	/* pointer to global SRTL descriptor */
+*	} ;
+*******************************************************************************
+
+m_link		equ	0
+m_start		equ	4
+m_length	equ	8
+m_lbase		equ	12
+
+*******************************************************************************
+*
+*	Event Block (EVB)
+*
+*    0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F   10
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 00 |     NEXTP     |     LINK      |     PRED      |      PD       |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 10 |      SWI      |     PARM      | FLAG  |     MASK      |SYSERR |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 20 |     RETURN    |TYP|PRI|      DH       |	   ROOT	     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+*
+*******************************************************************************
+* C Version:
+*===========
+*	
+*	#define EV_NOCANCEL 0x0001		/* event is occuring */
+*	#define EV_COMPLETE 0x0002		/* event completed */
+*	#define EV_ASR	    0x0004		/* event is delay event */
+*	#define EV_CANCEL   0x0008		/* event is fork-originated */
+*	#define EV_MGET	    0x0010		/* event is flag wait */
+*
+*	EVB		/* event block structure */
+*	{
+*		EVB	*e_nextp;	/* link to nxt event on PD event list*/
+*		EVB	*e_link;	/* link to nxt block on event chain */
+*		EVB	*e_pred;	/* link to prev block on event chain */
+*		PD	*e_pd;		/* owner PD */
+*	
+*		BYTE	*e_swi;		/* swi address */
+*		BYTE	*e_parm;	/* parm for request -> event comm */
+*		WORD	e_flag;
+*		EVSPEC	e_mask;		/* mask for event notification */
+*		WORD	e_syserr;	/* returned syserr	*/
+*	
+*		LONG	e_return;
+*		BYTE 	e_type;
+*		BYTE	e_prior;
+*		LONG	e_dh;		/* Pointer to driver header... */
+*		EVB	**e_root;	/* Root of event list. */
+*	} ;
+*
+*******************************************************************************
+
+e_nextp		equ	0	* next event on PD event list
+e_link		equ	4	* link to next block on event chain
+e_pred		equ	8	* link to prev block on event chain
+e_pd		equ	12
+e_swi		equ	16	* swi address (code for fork)
+e_parm		equ	20	* parm for request -> event comm
+e_flags		equ	24	* internal flags
+*					* NOTE: E_FLAG is an Error Code,
+*					*	hence e_flags
+e_mask		equ	26	* mask for event notification
+e_syserr	equ	30	* returned syserr
+
+e_return	equ	32
+e_type		equ	36
+e_prior		equ	37
+e_dh		equ	38	* not used on 68K, but must be present
+e_root		equ	42
+SIZEOF_EVB	equ	46
+
+*	*
+*	* e_flag definitions
+*	*
+
+EV_NOCANCEL equ	$00001		* event is occuring 
+EV_COMPLETE equ	$00002		* event completed
+EV_ASR	    equ	$00004		* event is ASR-originated
+EV_CANCEL   equ	$00008		* flag event has been cancelled
+EV_MGET	    equ	$00010		* evb came from os pool
+
+*******************************************************************************
+*
+*	Process Descriptor (PD)
+*
+*    0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F   10
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 00 |     LINK      |    THREAD     |    REGSAV     |      UDA      |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 10 |                 NAME                  |STA|PRI|  FLAG |  TYPE |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 20 |     EVBITS    |    EVWAIT     |     EVFLG     |    SWILIST    |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 30 |     EVLIST    |     TERM      |     CURMEM    |     PARENT    |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 40 |                            STDFIL			     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 50 | SECUR |RESERVE|USR|GRP|  FID  |      PID      | RNID  |  RFID |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 60 |      RPID     |CID|VCI|TCK|ABO|      BDA      |     CDA       |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 70 |     FEPTR     |      DEF      |      MGET     |     XLAT      |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 80 |  ESWIMASTER   |    ESLAVE     |     MASTER    |   SWIMASTER   |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 90 |  ESWIMASTER   |SWIENAB|STKSIZE|    SYSTACK    |    CMDENV     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* A0 |      NPX      |     SRTL       |     LDT      |     MAXMEM    |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* B0 |                              MEM				     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* C0 |     LEVEL     |     STAY      |     NRPL      |      JBA      |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+*
+*******************************************************************************
+* C Version:
+*===========
+*
+*	/* pd defines */
+*	/* p_stat */
+*	#define		PS_RUN		0
+*	#define		PS_BLOCK	1
+*	#define		PS_RESTORE	2
+*	#define 	PS_TERM		4
+*	#define		PS_MWAIT	6
+*	#define		PS_SHARE	8
+*	
+*	/* p_flag */
+*	#define		PF_SYSPROC	0x0001
+*	#define		PF_LOCKED	0x0002
+*	#define		PF_INSWI	0x0004
+*	#define		PF_ORIGINAL	0x0008
+*	
+*	#define		PF_NRPL		0x0010
+*	#define		PF_RESOURCE	0x0020
+*	#define		PF_SLAVE	0x0040
+*	#define 	PF_CTLC		0x0080
+*	#define		PF_INSYS	0x0100
+*	#define		PF_TEMPKEEP	0x0200
+*	#define		PF_LOADALL	0x0400
+*	#define		PF_SHOLD	0x0800	/* shared code holder */
+*	#define		PF_SUPER	0x1000
+*	#define		PF_SAVSTK	0x2000	/* Dos frontend errmode flag.*/
+*	#define		PF_ABORT	0x4000	/* Process Aborting. */
+*
+*	#if NEWSWI
+*	#define		PF_TERMSWI	0x8000	/* running term event swi */
+*	#else
+*	#define		PF_HANDLE	0x8000	/* Handling abort now? */
+*	#endif
+*	#define		PF1_WINDX	0x0001	/* Window is now switching */
+*	
+*	PD 
+*	{
+*		PD	*p_link;
+*		PD	*p_thread;
+*		REGSAV	*p_regsav;
+*		UDA	*p_uda;
+*	/* 0x10 */
+*		BYTE	p_name[10];
+*		BYTE	p_stat;
+*		BYTE	p_prior;
+*		WORD	p_flag;
+*		WORD	p_type;
+*	/* 0x20 */
+*		EVSPEC	p_evbits;	/* event bits in use */
+*		EVSPEC	p_evwait;	/* event wait mask */
+*		EVSPEC	p_evflg;	/* event flags */
+*	#if NEWSWI
+*		EVB	*p_swilist;	/* event list of pending SWIs */
+*	#else
+*		EVSPEC	p_swipend;	/* pending swi bits */
+*	#endif
+*	/* 0x30 */
+*		EVB	*p_evlist;
+*		EVB	*p_term;	/* wait for this proc to terminate */
+*		PD	*p_curmem;  	/* current memory context */
+*		PD	*p_parent;
+*	/* 0x40 */
+*			/* Environment Table Info */
+*		LONG	p_stdfil[4];	/* std in,out,err,ovl */
+*	/* 0x50 */
+*		WORD	p_secur;	/* default security */
+*		WORD	p_flag1;	/* process flags (second word) */
+*		BYTE	p_user;		/* Current User ID */
+*		BYTE	p_group;	/* Current Group ID */
+*		WORD	p_fid;		/* family id */
+*		LONG 	p_pid;
+*		WORD	p_rnid;
+*		WORD	p_rfid;		/* remote family id */
+*	/* 0x60 */
+*		LONG	p_rpid;
+*	
+*			/* End Environment Table Info */
+*	
+*		BYTE	p_cid;
+*		BYTE	p_vcid;
+*		BYTE	p_tkcnt;
+*		BYTE	p_abort;
+*		BDA	*p_bda;		/* bdos data area pointer */
+*		VCB	*p_cda;		/* cio data area */
+*	/* 0x70 */
+*		BYTE	*p_feptr;
+*		BYTE	*p_def;		/* DEFINE table */
+*		BYTE	*p_mget;	/* mgetblk memory owned by this process */
+*		BYTE	*p_xlat;	/* xlat table */
+*	/* 0x80 */
+*		EVB	*p_emaster;	/* controlled process master block field */
+*		EVB	*p_eslave;
+*		PD	*p_master;
+*	#if NEWSWI
+*		LONG	p_savwait;	/* events to wait when swi completes */
+*	/* 0x90 */
+*		LONG	p_swistk;	/* SWI system stack */
+*	#else
+*		PD	*p_swimaster;
+*	/* 0x90 */
+*		EVB	*p_eswimaster;
+*	#endif
+*		WORD	p_swienable;
+*		UWORD	p_stksiz;	/* System stack size */
+*		BYTE	*p_systak;
+*		BYTE	*p_cmdenv;
+*	/* 0xa0 */
+*		BYTE	*p_npx;		/* Numeric processor state save */
+*		LSRTL	*p_srtl;	/* Process Shared Runtime Lib. list */
+*		MTBL	*p_ldt;
+*		LONG	p_maxmem;
+*	/* 0xb0 */
+*		MD	*p_mem[4];	/* code, data, heap stack */
+*	/* 0xc0 */
+*		MLD	*p_level;
+*		MD	*p_stay;	/* term and stay resident memory */
+*		LONG	p_abortc;	/* abort code save */
+*	/* 0xcc */
+*	};		/* pd is 0xcc => 204 bytes */
+*
+*******************************************************************************
+
+p_link		equ	0	*
+p_thread	equ	4	*
+p_regsav	equ	8	*
+p_uda		equ	12	*
+p_name		equ	16	*
+p_stat		equ	26	*
+p_prior		equ	27	*
+p_flag		equ	28	*
+p_type		equ	30	*
+p_evbits	equ	32	* event bits in use
+p_evwait	equ	36	* event wait mask
+p_evflg		equ	40	* event flags
+ifne	NEWSWI
+p_swilist	equ	44	* list of pending swis
+endc
+ifeq	NEWSWI
+p_swipend	equ	44	* pending swi bits
+endc
+p_evlist	equ	48	*
+p_term		equ	52	* wait for this proc to terminate
+p_curmem	equ	56	* current memory context
+p_parent	equ	60	*
+p_stdfil	equ	64	* std in,out,err,ovl
+p_secur		equ	80	* default security
+p_flag1		equ	82	* flag word 1
+p_user		equ	84	* Current User ID
+p_group		equ	85	* Current Group ID
+p_fid		equ	86	* family id
+p_pid		equ	88	*
+p_rnid		equ	92	*
+p_rfid		equ	94	* remote family id
+p_rpid		equ	96	*
+*	
+*		/* End Environment Table Info */
+*	
+p_cid		equ	100	*
+p_vcid		equ	101	*
+
+p_abort		equ	102	*
+p_tkcnt		equ	103	*
+
+p_bda		equ	104	* bdos data area pointer
+p_cda		equ	108	* cio data area
+p_feptr		equ	112	*
+p_def		equ	116	* DEFINE table
+p_mget		equ	120	* mgetblk space owned by this process
+p_xlat		equ	124	* xlat table
+p_emaster	equ	128	*controlled process master block field
+p_eslave	equ	132	*
+p_master	equ	136	*
+
+ifne	NEWSWI
+p_savwait	equ	140	*
+p_swistk	equ	144	*
+endc
+
+ifeq	NEWSWI
+p_swimaster	equ	140	*
+p_eswimaster	equ	144	*
+endc
+
+p_swienable	equ	148	*
+p_stksiz	equ	150	* System stack size
+
+p_systak	equ	152	*
+p_cmdenv	equ	156	*
+p_npx		equ	160	* Numeric Processor State Save
+p_srtl		equ	164	* Process Shared Runtime Lib. list
+p_ldt		equ	168	*
+p_maxmem	equ	172	*
+p_mem		equ	176	* code, data, heap stack
+p_level		equ	192	*
+p_stay		equ	196	* term and stay resident memory
+p_nrpl		equ	200	*
+p_jba		equ	204	* the hutt (jump buffer area)
+
+SIZEOF_PD	equ	208	* 0d0h bytes
+
+*	*  p_stat  definitions
+
+PS_RUN		equ	0
+PS_BLOCK	equ	1
+PS_RESTORE	equ	2
+PS_TERM		equ	4
+PS_MWAIT	equ	6
+PS_SHARE	equ	8
+
+*	* p_flag  Bit Definitions
+
+PF_SYSPROC	equ	$0001
+PF_LOCKED	equ	$0002
+PF_INSWI	equ	$0004
+PF_ORIGINAL	equ	$0008
+PF_NRPL		equ	$0010
+PF_RESOURCE	equ	$0020
+PF_SLAVE	equ	$0040
+PF_CTLC		equ	$0080
+PF_INSYS	equ	$0100
+PF_TEMPKEEP	equ	$0200
+PF_LOADALL	equ	$0400
+PF_SHOLD	equ	$0800	* shared code holder
+PF_SUPER	equ	$1000
+PF_SAVSTK	equ	$2000	* Dos frontend errmode flag.
+PF_ABORT	equ	$4000	* Process Irrevocably Aborting.
+PF_HANDLE	equ	$8000	* Handling abort now?
+
+PF1_WINDX	equ	$0001	* PC-DOS front end madness
+
+*******************************************************************************
+* C Version:
+*===========
+*	
+*	MPB
+*	{
+*		MD	*mp_mfl; /* free list */
+*		MD	*mp_mal; /* allocation list */
+*		MD	*mp_rover; /* roving pointer */
+*		WORD	mp_waste; /* maximum storage waste */
+*		MD	*mp_thrdrt; /* memory thread list root */
+*	} ;
+*	
+*	MLD	/* memory level descriptor for procedures */
+*	{
+*		MLD	*ml_link;
+*		LMD	*ml_lmd;
+*		WORD	ml_level;
+*		jmp_buf	*ml_jb;
+*		LONG	ml_base;
+*		WORD	ml_ldtbase;
+*		WORD	ml_ldttop;
+*	} ;
+*	
+*******************************************************************************
+
+
+*******************************************************************************
+*
+*	Sync Parameter Block
+*
+*    0   1   2   3   4   5   6   7   8   9   A   B   C   D   E
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 00 |  TAS  |     LINK      |      OWNER    |      WAIT     |     
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+*
+*******************************************************************************
+* C Version:
+*===========
+*
+*	#define SPB	struct spb	/* sync parameter block */
+*	
+*	SPB
+*	{
+*		WORD	sy_tas;
+*		SPB	*sy_link;
+*		PD	*sy_owner;
+*		PD	*sy_wait;
+*	} ;
+*	
+*******************************************************************************
+
+sy_tas		equ	0
+sy_link		equ	2
+sy_owner	equ	6
+sy_wait		equ	10
+
+SIZEOF_SPB	equ	14
+
+*******************************************************************************
+*
+*	Flag Data Structure
+*
+*    0   1   2   3   4   5   6   7   8   9   A   B   C   D   E
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 00 |     FLG_PD    |    FLG_RET    |   FLG_EVB     | STATE |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+*
+*******************************************************************************
+* C Version:
+*===========
+*	
+*	FLAG
+*	{
+*		PD	*flg_pd;	/* process performing (FLAGSET) */
+*		LONG	flg_ret;	/* completion code (FLAGSET)	*/
+*		EVB	*flg_evb;	/* event block for FLAGEVENT	*/
+*		UWORD	flg_state;	/* Current Flag State		*/
+*	} ;
+*	
+*******************************************************************************
+
+flg_pd		equ	0
+flg_ret		equ	4
+flg_evb		equ	8
+flg_state	equ	12
+
+* flg_state definitions
+
+FLG_CLEAR	equ	0
+FLG_PENDING	equ	1
+FLG_COMPLETE	equ	2
+FLG_CANCEL	equ	3
+
+*******************************************************************************
+*
+*	ASR Data Structure
+*
+*    0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F   10
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 00 |     LINK      |     CODE      |     1DATA     |     2DATA     |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+* 10 |      EVB      |      STK      | STKLEN|FLA|PRI|      DH       |
+*    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+*
+*
+*******************************************************************************
+* C Version:
+*===========
+*
+*	/****************************************************************
+*	*
+*	*	ASR - ASR scheduling Data Definition
+*	*
+*	*****************************************************************/
+*	
+*	ASR
+*	{
+*		ASR	*asr_link;		/* next ASR in list	*/
+*		VOID	(*asr_code)();		/* Addr of ASR routine	*/
+*		LONG	asr_1data;		/* 1st Parm		*/
+*		LONG	asr_2data;		/* 2nd Parm		*/
+*	
+*		EVB	*asr_evb;		/* Event to wait for	*/
+*		BYTE	*asr_stk;		/* Stack Frame		*/
+*		WORD	asr_stklen;
+*		BYTE	asr_flags;		/* Flags		*/
+*		BYTE	asr_prior;		/* Scheduling Priority	*/
+*		LONG	asr_dh;			/* Driver Header Addr	*/
+*						/*  used by 286 to set  */
+*						/*  DS before calling   */
+*	};
+*	
+*		/* ASR_FLAGS definitions */
+*	
+*	#define	ASRF_RUN	0	/* runnable (DOASR)		*/
+*	#define ASRF_WAIT	1	/* event number, don't free in disp */
+*	#define ASRF_STK	2	/* ASRWAIT			*/
+*
+*******************************************************************************
+
+asr_link	equ	0	* next ASR in list
+asr_code	equ	4	* Addr of ASR routine
+asr_1data	equ	8	* 1st Parm
+asr_2data	equ	12	* 2nd Parm
+asr_evb		equ	16	* Event to wait for
+asr_stk		equ	20	* Stack Frame
+asr_stklen	equ	24	*
+asr_flags	equ	26	* Flags
+asr_prior	equ	27	* Scheduling Priority
+asr_dh		equ	28	* Driver Header Addr
+
+*		* ASR_FLAGS Definition
+
+ASRF_RUN	equ	$00	* runnable
+
+ASRF_WAIT	equ	$01	* waiting for event
+ASRF_STK	equ	$02	* ASRWAIT
+ASRF_FAKE	equ	$04	* ASRWAIT(0,stk)
+
+
+*******************************************************************************
+*
+* PORTAB.I - should approximate portab.h
+
+SBYTE	equ	1	* signed byte - rasm doesn't like 'BYTE'
+UBYTE	equ	1
+SWORD	equ	2	* signed word
+UWORD	equ	2
+LONG	equ	4
+ULONG	equ	4
+POINTER	equ	4
+
+*******************************************************************************
+*
+*		END OF KSTRUCT.EQU
+*
+*******************************************************************************
+***************
+*
+*		END OF KSTRUCT.EQU
+*
+***********************

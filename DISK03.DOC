@@ -1,0 +1,33 @@
+DISK3.DOC                       Developer Kit Disk 3 - UNIX-like Utilities 
+                                                       (part 2), CP/M 68K Tools,
+                                                       Special Utilities, and
+                                                       Code Sample
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+
+     This disk contains the following programming tools and sample code:
+
+Subdirectory          Explanation
+
+U_TOOLS               Remainder of the UNIX-like tools.  Documented in the 
+                      PROGRAMMER'S UTILITIES GUIDE SUPPLEMENT.  
+
+TOOLS                 CP/M 68K programming tools; requires the CP/M 68k 
+                      front-end be present.  The utilities COMBINE and
+                      EXPAND are CDOS native mode utilities that are 
+                      useful for conserving disk space used to store
+                      small files.  The typical naming convention is to
+                      give COMBINE'd files the extension ARC.  All of these
+                      programs are documented in the PROGRAMMER'S UTILITIES
+                      GUIDE.
+
+SAMPLE                Some of the Window Manager source is provided as an
+                      example of a program that implements windowing tech-
+                      niques, message passing, and process creation.
+                      In addition to the files listed in the release note
+                      the following files are included in the SAMPLE
+                      subdirectory:
+                           CCUTLS.H
+                           UTLERRS.H
+

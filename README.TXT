@@ -26,6 +26,7 @@ Function            Key
 <NEXT>              -->| (the tab key on the arrow keypad)
 <PREV>              |<-- (the backtab key on the arrow keypad)
 
+
 DISK2.DOC                       Developer Kit Disk 2 - Executable Utilities
                                                        (part 2) and UNIX-like
                                                        Utilities (part 1) 
@@ -38,6 +39,7 @@ _______________________________________________________________________________
 UNIX.  These UNIX-like tools are provided to help system developers and
 application programmers create and maintain files.  These tools are documented
 in the PROGRAMMER'S UTILITIES GUIDE SUPPLEMENT.  
+
 
 
 
@@ -75,6 +77,7 @@ SAMPLE                Some of the Window Manager source is provided as an
                            UTLERRS.H
 
 
+
 DISK4.DOC                       Developer Kit Disk 4 - Programmer's Utilities
                                                        and Tools and C Compiler
 6 August 1986                                          CDOS 68K ver. 1.2
@@ -93,6 +96,7 @@ MICROPROCESSORS.
 code and therefore, the executable files produced can only be run on CDOS 68K
 systems that include the CP/M 68K front end.  CDOS native mode C programs can
 be produced by using the SYSLIB.L68 library included on Developer Kit Disk 5.  
+
 
 DISK5.DOC                               Developer Kit Disk 5 - SYSTEM LIBRARY
 6 August 1986                                              CDOS 68K, ver. 1.2
@@ -165,4 +169,262 @@ SAMPLE PROGRAMS:
 	LD.C 	  -- Does S_LOOKUPS on the Disk File Table looking
 	for sub-directories.  LD may be invoked with or without a
 	argument.  Wild cards are allowed.
+
+
+DISK6.DOC               Developer Kit Supplement Disk 1 - Driver and System
+                                                          Sources
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+     This diskette is organized into three subdirectories:
+
+     DRV_SRC -- Contains all of the CDOS 68K driver modules in source form.
+     In addition to the files listed in the release note, this subdirectory
+     contains the file CPASM.BAT which is used to process the RAMDISK driver
+     source component BTOOLS.PS.  To produce a loadable ramdisk driver, the 
+     linker output file RDD.68K must be processed by the CRUNCH utility.
+     
+     SYS_SRC -- Contains all of the CDOS 68K system configuration modules
+     in source form.  Also, the file listed in the release note as OMMUA.S
+     is named OMMUA.PS.  Files with the file extension "PS" are assembler
+     files that use the #include directive and must be processed by the C
+     preprocessor CP68.68k.
+
+     HEADERS -- Contains all of the .h files used to compile the sources 
+     in DRV_SRC and SYS_SRC.
+
+     In order to conserve disk space, some of the .h files that are used to
+compile the SYSLIB sources may not have been duplicated on this disk.  Check 
+Developer Kit Disk 5 for additional .h files.
+
+
+
+DISK7.DOC               Developer Kit Supplement Disk 2 - System Debugger,
+                                                          System Generation
+                                                          Tools and Objects
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+     This diskette is organized into two subdirectories:
+
+     DEBUGGER -- Contains all of the files necessary to debug a CDOS 68K
+     system under CP/M 68K.  Instructions for using the cross-environment
+     debugger are provided in the CDOS 68K Release Note.
+
+     SYS_GEN -- Organized into two subdirectories:
+
+          TOOLS --  Contains .BAT and .COM files to link a new system file.
+          The different permutations of hardware and features are described
+          in the CDOS 68K Release Note.  To link a new system file you must
+          increase the stack size of LINK68.68K to F000h with the following
+          command:
+
+               SS -sf000 link68.68k
+
+          OBJECTS -- Contains some of the objects files required to link a new
+          system file.
+
+NOTE:  The files BASE.O, COFFLOAD.O, and COMMAND.O are on Developer Kit
+Supplement Disk 2 instead of Developer Kit Disk 3 as shown in the CDOS
+68K Release Note.
+
+
+
+DISK8.DOC               Developer Kit Supplement Disk 3 - System Generation
+                                                          Objects
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+     This diskette is contains the remainder of the object files required to\
+generate a new system file.  In general the files are organized into the
+following categories:
+
+File System files:
+FSCACHE.O
+FSDM.O
+FMNAME.O
+FSPATH.O
+FSVOL.O
+FSWINDOW.O
+HOOK.O
+
+CP/M 68k Front End files:
+FE1.O
+FE2.O
+FE68.O
+FESTUB.O (used in systems with no front end)
+FEINIT.O
+FEMAIN.O
+FE.O
+FEU1.O
+FEU2.O
+FPOOL.O
+FPOOL68K.O (used in systems with no front end)
+FPRINTF.O
+SUP68K.O
+SUP68KNF.O (used in systems with no front end)
+
+Console Driver files:
+VCDRCOPY.O
+VCDRTOOL.O
+VCDRV.O
+VCDRVWRT.O
+IBMTOVM.O
+VMCONASM.O
+VMKB.O
+
+Disk Driver files
+VMDISKA.O
+VMRWINDK.O
+
+Serial Port Driver files
+VM400.O
+VT52.O
+SDRV.O
+DRT.O
+
+Kernel, Resource Managers and Misc. files
+ABORT.O		AFLAG.O		ALLOCATE.O	ASYNC.O
+ASYNCA.O	BASE.O		COFFLOAD.O	COMMAND.O
+CPMLOAD.O	CRMAN.O		CRMCONV8.O	CRMCOPY.O
+CRMCREAT.O	CRMDEL.O	CRMREAD.O	CRMGSL.O
+CRMINST.O	CRMKB.O		CRMMOUSE.O	CRMOPEN.O
+CRMRDEL.O	CRMWIND.O	CRMWRITE.O	CRMXLAT.O
+DINIT.O		DVRIF.O		EXCEPT.O	FREE.O
+HEAP.O		INSTALL.O	KFUNCS.O	KTOOLS.O
+LOAD68K.O	LUTILS.O	M68.O		MISMAN.O
+MGETBLK.O	NULLDEV.O	OFILE.O 	OSMEM.O
+OVERLAY.O	PANIC68.O	PEWTER.O 	PIPE.O
+PMGET.O	        PROCESS.O	RDELIM.O 	RTMIF.O
+SUPERMAN.O	SWI68K.O	TABLES.O	TOOLS.O
+VMCLK.O		VMCONFIG.O	VMPANIC.O	VMQUEUE.O
+VPROBE.O
+
+NOTE:  The files BASE.O, COFFLOAD.O, and COMMAND.O are on Developer Kit
+Supplement Disk 2 instead of Developer Kit Disk 3 as shown in the CDOS
+68K Release Note.
+
+
+DISK9.DOC                OEM Redistribution Kit Disk 1 - Utility Objects
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+     This diskette contains the object files and batch files to build the
+following utilities:
+
+RECDIR
+FSET
+MORE
+SORT
+CHKDSK
+PROCESS
+CONFIG
+RENAME
+DATE
+DIR
+DISKSET
+FIND
+TIME
+TREE
+TYPE
+COPY
+VER
+VOL
+BACKUP
+WMEX
+RESTORE
+LOGON
+COMP
+PASSWORD
+RECFILE
+
+
+DISK10.DOC                OEM Redistribution Kit Disk 2 - System Libraries
+                                                          Shell Objects, Booter
+							  Source, and OEM
+							  Configurable Utilities
+                                                          Sources
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+     This diskette is organized into the following subdirectories:
+
+L68S -- System libraries linked into the shell and the CDOS utilities.
+
+SHEL_OBJ -- Shell object file and the linker input file SHELL.COM to 
+regenerate the shell.
+
+BOOTER  --  Sources to the booter used with CDOS 68K for the VME/10.
+
+CFG_UTL  --  Sources and linker input files for the following OEM
+configurable utilities:
+
+COFF
+FORMAT
+SYS
+DISKCOMP
+DISKCOPY
+CRUNCH
+SS
+
+This subdirectory also includes the files PORTAB.H and STDIO.H.  These
+are special versions the header files designed specifically for use when
+compiling the BOOTER and other utilities.  Do not use other versions of
+PORTAB.H or STDIO.H when compiling sources included on this disk.
+
+DISK11.DOC                OEM Redistribution Kit Disk 3 - System Message Source,
+                                                          CP/M68K to CDOS File
+                                                          Transfer Utility, and
+                                                          Special Sources
+6 August 1986                                          CDOS 68K ver. 1.2
+_______________________________________________________________________________
+ 
+     This diskette is organized into the following subdirectories:
+
+CCMSGS --  Contains the sources to all of the general system messages in
+COMBINE'd file format.  Convert to individual files using the EXPAND
+utility.
+
+UTL_MSGS -- Contains the sources to these utilities in COMBINE'd file
+format.  Convert to individual files using the EXPAND utility.
+
+RECDIR
+FSET
+MORE
+SORT
+CHKDSK
+PROCESS
+CONFIG
+RENAME
+DATE
+DIR
+DISKSET
+FIND
+TIME
+TREE
+TYPE
+COPY
+VER
+VOL
+BACKUP
+WMEX
+RESTORE
+LOGON
+COMP
+PASSWORD
+RECFILE
+
+Source -- Contains the source to files which must be modified to run CDOS
+68K on a Motorola 68020 microprocessor.  See the CDOS 68K Release Note
+for additional information; these files are named DISPA.PS and MMU.PS and 
+should be assembled using the CPASM.BAT file found in the DRV_SRC directory 
+on Developer Kit Supplement Disk 1.  This subdirectory also contains the 
+files STRUCT.EQU, PANIC.EQU, and CPUMMU.EQU which are not shown on the list
+of included files in the RELEASE NOTE.
+
+VMUTIL --  Contains the source and executable file for the CP/M 68K to CDOS 
+68K file transfer utilitiy.
+
+SHEL_MSG -- Contains the sources to the utilities built in to the shell in
+COMBINE'd file  format.  Convert to individual files using the EXPAND utility.
 
