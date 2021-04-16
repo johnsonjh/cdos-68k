@@ -55,3 +55,9 @@ CFG_UTL/DISKCOPY.COM linguist-vendored
 CFG_UTL/COFF.COM linguist-vendored
 /PROCESS.COM linguist-vendored
 /RESTORE.COM linguist-vendored
+*.PS linguist-vendored
+*.ps linguist-vendored
+.ps linguist-vendored
+.PS linguist-vendored
+SYS_SRC/OMMUA.PS linguist-vendored
+DRV_SRC/BTOOLS.PS linguist-vendored
