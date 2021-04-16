@@ -427,3 +427,5 @@ VMUTIL --  Contains the source and executable file for the CP/M 68K to CDOS
 
 SHEL_MSG -- Contains the sources to the utilities built in to the shell in
 COMBINE'd file  format.  Convert to individual files using the EXPAND utility.
+
+Codacy Badge
