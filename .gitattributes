@@ -2,6 +2,14 @@
 .arc linguist-vendored
 *.ARC linguist-vendored
 *.arc linguist-vendored
+.COM linguist-vendored
+*.COM linguist-vendored
+.com linguist-vendored
+*.com linguist-vendored
+*.PS linguist-vendored
+*.ps linguist-vendored
+.ps linguist-vendored
+.PS linguist-vendored
 SHEL_MSG/SHELMSGS.ARC linguist-vendored
 CCMSGS/CCMSGS.ARC linguist-vendored
 UTL_MSGS/UTILMSGS.ARC linguist-vendored
@@ -16,10 +24,6 @@ HEADERS/BTOOLS.H linguist-vendored
 CFG_UTL/LOAD68K.H linguist-vendored
 HEADERS/DH.H linguist-vendored
 SAMPLE/UTLERRS.H linguist-vendored
-.COM linguist-vendored
-*.COM linguist-vendored
-.com linguist-vendored
-*.com linguist-vendored
 CFG_UTL/CRUNCH.COM linguist-vendored
 /RECDIR.COM linguist-vendored
 /FSET.COM linguist-vendored
@@ -55,9 +59,5 @@ CFG_UTL/DISKCOPY.COM linguist-vendored
 CFG_UTL/COFF.COM linguist-vendored
 /PROCESS.COM linguist-vendored
 /RESTORE.COM linguist-vendored
-*.PS linguist-vendored
-*.ps linguist-vendored
-.ps linguist-vendored
-.PS linguist-vendored
 SYS_SRC/OMMUA.PS linguist-vendored
 DRV_SRC/BTOOLS.PS linguist-vendored
