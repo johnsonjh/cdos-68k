@@ -1,6 +1,6 @@
 # Concurrent DOS 68K
 
-Concurrent DOS for the Motorola MC68000 VME/10
+* **Concurrent DOS for the Motorola MC68000 VME/10**
 
 ```text
 DISK1.DOC                       Developer Kit Disk 1 - Boot Disk and Executable
