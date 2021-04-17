@@ -61,3 +61,6 @@ CFG_UTL/COFF.COM linguist-vendored
 /RESTORE.COM linguist-vendored
 SYS_SRC/OMMUA.PS linguist-vendored
 DRV_SRC/BTOOLS.PS linguist-vendored
+*.BAT linguist-vendored
+.BAT linguist-vendored
+
