@@ -1,3 +1,8 @@
+# Concurrent DOS 68K
+
+Concurrent DOS for the Motorola MC68000 VME/10
+
+```text
 DISK1.DOC                       Developer Kit Disk 1 - Boot Disk and Executable
                                                        Utilities (part 1)
 6 August 1986                                          CDOS 68K ver. 1.2
@@ -26,7 +31,8 @@ Function            Key
 <NEXT>              -->| (the tab key on the arrow keypad)
 <PREV>              |<-- (the backtab key on the arrow keypad)
 
-
+```
+```text
 DISK2.DOC                       Developer Kit Disk 2 - Executable Utilities
                                                        (part 2) and UNIX-like
                                                        Utilities (part 1)
@@ -42,7 +48,8 @@ in the PROGRAMMER'S UTILITIES GUIDE SUPPLEMENT.
 
 
 
-
+```
+```text
 DISK3.DOC                       Developer Kit Disk 3 - UNIX-like Utilities
                                                        (part 2), CP/M 68K Tools,
                                                        Special Utilities, and
@@ -77,7 +84,8 @@ SAMPLE                Some of the Window Manager source is provided as an
                            UTLERRS.H
 
 
-
+```
+```text
 DISK4.DOC                       Developer Kit Disk 4 - Programmer's Utilities
                                                        and Tools and C Compiler
 6 August 1986                                          CDOS 68K ver. 1.2
@@ -97,7 +105,8 @@ code and therefore, the executable files produced can only be run on CDOS 68K
 systems that include the CP/M 68K front end.  CDOS native mode C programs can
 be produced by using the SYSLIB.L68 library included on Developer Kit Disk 5.
 
-
+```
+```text
 DISK5.DOC                               Developer Kit Disk 5 - SYSTEM LIBRARY
 6 August 1986                                              CDOS 68K, ver. 1.2
 -----------------------------------------------------------------------------
@@ -170,7 +179,8 @@ SAMPLE PROGRAMS:
         for sub-directories.  LD may be invoked with or without a
         argument.  Wild cards are allowed.
 
-
+```
+```text
 DISK6.DOC               Developer Kit Supplement Disk 1 - Driver and System
                                                           Sources
 6 August 1986                                          CDOS 68K ver. 1.2
@@ -198,7 +208,8 @@ compile the SYSLIB sources may not have been duplicated on this disk.  Check
 Developer Kit Disk 5 for additional .h files.
 
 
-
+```
+```text
 DISK7.DOC               Developer Kit Supplement Disk 2 - System Debugger,
                                                           System Generation
                                                           Tools and Objects
@@ -229,7 +240,8 @@ Supplement Disk 2 instead of Developer Kit Disk 3 as shown in the CDOS
 68K Release Note.
 
 
-
+```
+```text
 DISK8.DOC               Developer Kit Supplement Disk 3 - System Generation
                                                           Objects
 6 August 1986                                          CDOS 68K ver. 1.2
@@ -304,7 +316,8 @@ NOTE:  The files BASE.O, COFFLOAD.O, and COMMAND.O are on Developer Kit
 Supplement Disk 2 instead of Developer Kit Disk 3 as shown in the CDOS
 68K Release Note.
 
-
+```
+```text
 DISK9.DOC                OEM Redistribution Kit Disk 1 - Utility Objects
 6 August 1986                                          CDOS 68K ver. 1.2
 _______________________________________________________________________________
@@ -338,7 +351,8 @@ COMP
 PASSWORD
 RECFILE
 
-
+```
+```text
 DISK10.DOC                OEM Redistribution Kit Disk 2 - System Libraries
                                                           Shell Objects, Booter
                                                           Source, and OEM
@@ -372,6 +386,8 @@ are special versions the header files designed specifically for use when
 compiling the BOOTER and other utilities.  Do not use other versions of
 PORTAB.H or STDIO.H when compiling sources included on this disk.
 
+```
+```text
 DISK11.DOC                OEM Redistribution Kit Disk 3 - System Message Source,
                                                           CP/M68K to CDOS File
                                                           Transfer Utility, and
@@ -427,3 +443,4 @@ VMUTIL --  Contains the source and executable file for the CP/M 68K to CDOS
 
 SHEL_MSG -- Contains the sources to the utilities built in to the shell in
 COMBINE'd file  format.  Convert to individual files using the EXPAND utility.
+```
